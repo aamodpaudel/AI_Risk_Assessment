@@ -42,76 +42,67 @@ const THEME = {
 const QUESTIONS = [
   {
     id: 'q1',
-    title: 'Confirmation of Your Role & Industry',
-    subtitle: 'Select the category that best describes your current work.',
+    title: 'Confirmation of Your Role',
+    subtitle: 'Here is your profile information. Please confirm these are correct so we can calibrate your report.\n\nRole: [High School Student]\nIndustry: [Education/General]\nCareer Stage: [Entry/Student]',
     type: 'options',
     options: [
-      { id: 'digital', label: 'Pure Digital Execution', desc: 'Junior Dev, Data Entry, Translation', value: 90, icon: <Laptop size={24} /> },
-      { id: 'creative', label: 'Creative & Content', desc: 'Copywriting, Design, Marketing', value: 80, icon: <Brain size={24} /> },
-      { id: 'finance', label: 'Predictive Finance & Ops', desc: 'Analysts, Accountants, Logistics', value: 75, icon: <BarChart3 size={24} /> },
-      { id: 'leadership', label: 'Strategic Leadership', desc: 'Product Managers, Founders, CISO', value: 50, icon: <Target size={24} /> },
-      { id: 'human', label: 'High-Stakes Human', desc: 'Healthcare, Skilled Trades, Legal', value: 30, icon: <ShieldAlert size={24} /> }
+      { id: 'confirm', label: 'Confirm and Continue', desc: 'I verify these details are correct.', value: 75, icon: <CheckCircle size={24} /> }
     ]
   },
   {
     id: 'q2',
-    title: 'Why is Understanding AI Career Risk Important to You?',
-    subtitle: 'Share your thoughts in a few words.',
+    title: 'Why is AI Career Assessment Important to You?',
     type: 'text',
-    placeholder: 'e.g., I worry about AI taking computer jobs and am struggling with whether I should apply to a CS major...'
+    placeholder: 'I worry about AI taking computer jobs and so struggling whether I should apply to CS major'
   },
   {
     id: 'q3',
-    title: 'Volume of Automation',
-    subtitle: 'If you had a perfect AI assistant, how much of your weekly tasks could AI do for you?',
+    title: 'If you had a perfect AI assistant, how much of your weekly tasks could AI do for you?',
     type: 'options',
     options: [
-      { id: 'v_low', label: '0-25% Automation', desc: 'My work is almost entirely human-dependent.', value: 10 },
-      { id: 'v_med', label: '26-50% Automation', desc: 'Some routine work is automatable, but the "core" requires my touch.', value: 40 },
-      { id: 'v_high', label: '51-75% Automation', desc: 'A large portion of my daily output is digital and predictable.', value: 75 },
-      { id: 'v_max', label: '76-100% Automation', desc: 'Almost my entire task list can possibly be handled by AI.', value: 100 }
+      { id: 'v_low', label: '0 - 25%', desc: 'My work is almost entirely human-dependent (physical, emotional, or high-stakes).', value: 10 },
+      { id: 'v_med', label: '26 - 50%', desc: 'Some of my routine work is automatable, but the "core" requires my touch.', value: 40 },
+      { id: 'v_high', label: '51 - 75%', desc: 'A large portion of my daily output is digital and predictable.', value: 75 },
+      { id: 'v_max', label: '76 - 100%', desc: 'Almost my entire tasks can possibly be handled by AI.', value: 100 }
     ]
   },
   {
     id: 'q4',
-    title: 'Skill Offset: AI Usage',
-    subtitle: 'How often do you use AI tools to get things done?',
+    title: 'How often do you use AI tools to get things done?',
     type: 'options',
     options: [
-      { id: 's_rare', label: 'Rarely (Passenger)', desc: 'I rarely use them, or only for simple web searches.', value: 100 },
-      { id: 's_daily', label: 'Daily (Co-Pilot)', desc: 'I use them daily to help me write, brainstorm, or solve problems.', value: 50 },
-      { id: 's_power', label: 'Power User (Captain)', desc: 'I\'ve customized tools or connected them to automate workflows.', value: 0 }
+      { id: 's_rare', label: 'Rarely (Passenger)', desc: 'I rarely use them, or I only use them for simple web searches.', value: 100 },
+      { id: 's_daily', label: 'Daily (Co-Pilot)', desc: 'I use them daily to help me write, brainstorm, or solve problems faster.', value: 50 },
+      { id: 's_power', label: 'Power User (Captain)', desc: 'I’ve customized my tools or connected them to handle my work automatically.', value: 0 }
     ]
   },
   {
     id: 'q5',
-    title: 'Oversight & Expertise',
-    subtitle: 'How easily can you determine a critical mistake made by AI and intervene?',
+    title: 'Trust and Oversight',
+    subtitle: 'AI technology and tools can hallucinate, and can often provide biased or even misleading information. How easily you can determine any critical mistake made by AI and intervene.',
     type: 'options',
     options: [
-      { id: 'o_miss', label: 'Might Miss It', desc: 'I have little idea how AI works under the hood.', value: 100 },
-      { id: 'o_catch', label: 'Catch Big Ones', desc: 'I use common sense to spot obvious hallucinations.', value: 50 },
-      { id: 'o_spot', label: 'Spot Instantly', desc: 'I have a deep understanding of the subject and AI mechanics.', value: 0 }
+      { id: 'o_miss', label: 'I might miss it', desc: 'because I have no idea how AI works', value: 100 },
+      { id: 'o_catch', label: "I'd catch big ones", desc: 'but based on common sense', value: 50 },
+      { id: 'o_spot', label: "I'd spot it instantly", desc: 'because I have a good understanding of how AI works under the hood', value: 0 }
     ]
   },
   {
     id: 'q6',
-    title: 'Career Stage & Ambition',
-    subtitle: 'With AI career disruption happening, where do you want to go next?',
+    title: 'With AI career disruption, where do you want to go next?',
     type: 'options',
     options: [
-      { id: 'c_launch', label: 'The Launch', desc: 'Student or Entry Level. I want to build a safe foundation.', value: 15 },
-      { id: 'c_climb', label: 'The Climb', desc: 'Growing in my current field. I want to get ahead securely.', value: 5 },
-      { id: 'c_pivot', label: 'The Pivot', desc: 'Changing career paths entirely. I want to transition smoothly.', value: 10 },
-      { id: 'c_build', label: 'The Build', desc: 'Entrepreneur/Founder. I want to be a boss and create something big.', value: -15 }
+      { id: 'c_launch', label: 'I want to stay safe.', desc: '(Future-Proofing)', value: 15 },
+      { id: 'c_climb', label: 'I want to get ahead.', desc: '(The Leap)', value: 5 },
+      { id: 'c_pivot', label: 'I want to change paths.', desc: '(The Pivot)', value: 10 },
+      { id: 'c_build', label: 'I want to be a boss by creating something big.', desc: '(The Build)', value: -15 }
     ]
   },
   {
     id: 'q7',
-    title: 'Your Vision',
-    subtitle: 'Tell us your specific dream or your biggest worry caused by AI.',
+    title: 'Tell us your specific dream or biggest worry from AI in your career.',
     type: 'text',
-    placeholder: 'e.g., My dream is to launch my own automated agency, or my worry is becoming obsolete in 3 years...'
+    placeholder: 'Type your answer here...'
   }
 ];
 
@@ -240,7 +231,7 @@ export default function App() {
         <div className="mb-8">
           <div className="text-sm font-bold text-pink-600 tracking-wider uppercase mb-2">Question {step} of 7</div>
           <h2 className="text-3xl font-bold text-gray-900 mb-2">{q.title}</h2>
-          <p className="text-gray-500 text-lg">{q.subtitle}</p>
+          {q.subtitle && <p className="text-gray-500 text-lg whitespace-pre-line">{q.subtitle}</p>}
         </div>
 
         {q.type === 'options' && (
