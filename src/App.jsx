@@ -3,7 +3,7 @@ import {
   Compass, ShieldAlert, Rocket, Target, Briefcase,
   Laptop, CheckCircle, Download, ChevronRight,
   ChevronLeft, AlertTriangle, PlayCircle, BarChart3, Users,
-  BookOpen, Wrench, MessageSquare, Network, Brain
+  BookOpen, Wrench, MessageSquare, Network, Brain, Lock
 } from 'lucide-react';
 
 // --- DATA & CONFIG ---
@@ -463,11 +463,11 @@ export default function App() {
           {!isUnlocked && (
             <div className="absolute inset-x-0 top-0 bottom-0 z-20 flex flex-col items-center justify-start pt-24 bg-white/60 backdrop-blur-md rounded-3xl" style={{ marginTop: '-2rem', marginBottom: '-2rem' }}>
               <div className="bg-white p-8 rounded-3xl shadow-2xl text-center max-w-lg border border-gray-100 mx-4">
-                <div className="w-16 h-16 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Target size={32} />
+                <div className="w-16 h-16 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm border border-pink-200">
+                  <Lock size={32} />
                 </div>
                 <h3 className="text-3xl font-bold text-gray-900 mb-3">Unlock Your Action Plan</h3>
-                <p className="text-gray-500 text-lg mb-8">Sign up to access your personalized 4-step resolution and see your dedicated AI acceleration kit.</p>
+                <p className="text-gray-500 text-lg mb-8">Sign up to access your personalized 4-step resolution and see your dedicated AI insights.</p>
                 <button
                   onClick={() => setShowSignupModal(true)}
                   className="w-full bg-pink-600 text-white py-4 rounded-full font-bold text-xl hover:bg-pink-700 transition shadow-lg"
