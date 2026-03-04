@@ -189,7 +189,7 @@ export default function App() {
         interpretation = "You're in a great spot, [Username]! You've successfully integrated AI into your daily routine and are acting as a true 'Director of Intelligence'. Keep expanding your strategic vision and leading the way.";
       } else if (riskScore <= 50) {
         profile = 'The Navigator (Medium Risk)';
-        interpretation = "You're doing well, [Username], but it's important to stay alert. You're safe for now, but to ensure long-term security, let's aggressively increase your 'Skill Offset' to stay ahead of the curve.";
+        interpretation = "You're doing well, [Username], but it's important to stay alert. You're safe for now, but to ensure long-term security, let's proactively close your AI Skill Gap to stay ahead of the curve.";
       } else if (riskScore <= 75) {
         profile = 'The Passenger (High Risk)';
         interpretation = "It looks like your current role is shifting, [Username]. A large portion of your tasks is becoming commoditized by AI. But don't worry—now is the perfect time to start steering the ship and taking control of your AI journey.";
@@ -389,7 +389,7 @@ export default function App() {
                 </div>
                 <div>
                   <div className="flex justify-between text-sm mb-1 font-medium">
-                    <span className="text-gray-600">Automation Volume (40%)</span>
+                    <span className="text-gray-600">Automation Vulnerability (40%)</span>
                     <span className="text-gray-900">{breakdown.V}</span>
                   </div>
                   <div className="w-full bg-gray-100 rounded-full h-2">
@@ -398,7 +398,7 @@ export default function App() {
                 </div>
                 <div>
                   <div className="flex justify-between text-sm mb-1 font-medium">
-                    <span className="text-gray-600">Skill Offset (15%)</span>
+                    <span className="text-gray-600">AI Skill Gap (15%)</span>
                     <span className="text-gray-900">{breakdown.S}</span>
                   </div>
                   <div className="w-full bg-gray-100 rounded-full h-2">
@@ -407,7 +407,7 @@ export default function App() {
                 </div>
                 <div>
                   <div className="flex justify-between text-sm mb-1 font-medium">
-                    <span className="text-gray-600">Oversight Lack (10%)</span>
+                    <span className="text-gray-600">Lack of AI Oversight (10%)</span>
                     <span className="text-gray-900">{breakdown.O}</span>
                   </div>
                   <div className="w-full bg-gray-100 rounded-full h-2">
@@ -482,7 +482,7 @@ export default function App() {
               <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] p-6 bg-white rounded-2xl shadow-sm border border-gray-100 ml-4 md:ml-0">
                 <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center"><Users className="text-pink-600 mr-2" size={20} /> Join Careerlink Circles</h3>
                 <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                  You are not on this journey alone. Improve your Skill Offset ({breakdown.S}) by collaborating with peers in Careerlink Circles. Solve real-world problems together.
+                  You are not on this journey alone. Reduce your AI Skill Gap ({breakdown.S}) by collaborating with peers in Careerlink Circles. Solve real-world problems together.
                 </p>
                 <div className="space-y-3 no-print">
                   {CIRCLES.slice(0, 2).map((circle, i) => (
