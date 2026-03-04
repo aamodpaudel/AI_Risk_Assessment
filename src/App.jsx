@@ -77,7 +77,8 @@ const QUESTIONS = [
   },
   {
     id: 'q5',
-    title: 'AI technology and tools can hallucinate, and can often provide biased or even misleading information. How easily you can determine any critical mistake made by AI and intervene.',
+    title: 'How easily you can determine any critical mistake made by AI and intervene?',
+    subtitle: 'AI technology and tools can hallucinate, and can often provide biased or even misleading information.',
     type: 'options',
     options: [
       { id: 'o_miss', label: 'I might miss it', desc: 'because I have no idea how AI works', value: 100 },
@@ -460,16 +461,16 @@ export default function App() {
         {/* 4-Step Resolution Section */}
         <div className="print-break relative">
           {!isUnlocked && (
-            <div className="absolute inset-x-0 top-0 bottom-0 z-20 flex flex-col items-center justify-center bg-white/60 backdrop-blur-md rounded-3xl" style={{ marginTop: '-2rem', marginBottom: '-2rem' }}>
-              <div className="bg-white p-8 rounded-3xl shadow-2xl text-center max-w-md border border-gray-100">
+            <div className="absolute inset-x-0 top-0 bottom-0 z-20 flex flex-col items-center justify-start pt-24 bg-white/60 backdrop-blur-md rounded-3xl" style={{ marginTop: '-2rem', marginBottom: '-2rem' }}>
+              <div className="bg-white p-8 rounded-3xl shadow-2xl text-center max-w-lg border border-gray-100 mx-4">
                 <div className="w-16 h-16 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Target size={32} />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Unlock Your Action Plan</h3>
-                <p className="text-gray-500 mb-6">Sign up to access your personalized 4-step resolution and see your dedicated AI acceleration kit.</p>
+                <h3 className="text-3xl font-bold text-gray-900 mb-3">Unlock Your Action Plan</h3>
+                <p className="text-gray-500 text-lg mb-8">Sign up to access your personalized 4-step resolution and see your dedicated AI acceleration kit.</p>
                 <button
                   onClick={() => setShowSignupModal(true)}
-                  className="w-full bg-pink-600 text-white py-3 rounded-full font-bold text-lg hover:bg-pink-700 transition shadow-lg"
+                  className="w-full bg-pink-600 text-white py-4 rounded-full font-bold text-xl hover:bg-pink-700 transition shadow-lg"
                 >
                   Sign Up to Access Full Resolution
                 </button>
