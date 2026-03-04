@@ -43,7 +43,6 @@ const QUESTIONS = [
   {
     id: 'q1',
     title: 'Confirmation of Your Role',
-    subtitle: 'Here is your profile information. Please confirm these are correct so we can calibrate your report.\n\nRole: [High School Student]\nIndustry: [Education/General]\nCareer Stage: [Entry/Student]',
     type: 'options',
     options: [
       { id: 'confirm', label: 'Confirm and Continue', desc: 'I verify these details are correct.', value: 75, icon: <CheckCircle size={24} /> }
@@ -78,8 +77,7 @@ const QUESTIONS = [
   },
   {
     id: 'q5',
-    title: 'Trust and Oversight',
-    subtitle: 'AI technology and tools can hallucinate, and can often provide biased or even misleading information. How easily you can determine any critical mistake made by AI and intervene.',
+    title: 'AI technology and tools can hallucinate, and can often provide biased or even misleading information. How easily you can determine any critical mistake made by AI and intervene.',
     type: 'options',
     options: [
       { id: 'o_miss', label: 'I might miss it', desc: 'because I have no idea how AI works', value: 100 },
@@ -124,6 +122,15 @@ export default function App() {
   const [step, setStep] = useState(0); // 0 = Intro, 1-7 = Qs, 8 = Calc, 9 = Result
   const [answers, setAnswers] = useState({});
   const [results, setResults] = useState(null);
+
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [profileData, setProfileData] = useState({
+    role: 'High School Student',
+    industry: 'Education/General',
+    stage: 'Entry/Student'
+  });
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [showSignupModal, setShowSignupModal] = useState(false);
 
   // Print Styles Setup
   useEffect(() => {
@@ -231,10 +238,34 @@ export default function App() {
         <div className="mb-8">
           <div className="text-sm font-bold text-pink-600 tracking-wider uppercase mb-2">Question {step} of 7</div>
           <h2 className="text-3xl font-bold text-gray-900 mb-2">{q.title}</h2>
-          {q.subtitle && <p className="text-gray-500 text-lg whitespace-pre-line">{q.subtitle}</p>}
+          {q.id === 'q1' && !isEditingProfile && (
+            <p className="text-gray-500 text-lg whitespace-pre-line">
+              Here is your profile information. Please confirm these are correct so we can calibrate your report.
+              {'\n\n'}Role: [{profileData.role}]
+              {'\n'}Industry: [{profileData.industry}]
+              {'\n'}Career Stage: [{profileData.stage}]
+            </p>
+          )}
+          {q.id !== 'q1' && q.subtitle && <p className="text-gray-500 text-lg whitespace-pre-line">{q.subtitle}</p>}
         </div>
 
-        {q.type === 'options' && (
+        {q.id === 'q1' && isEditingProfile ? (
+          <div className="space-y-4 mb-10">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+              <input type="text" className="w-full p-3 rounded-xl border border-gray-300 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 outline-none" value={profileData.role} onChange={(e) => setProfileData({ ...profileData, role: e.target.value })} />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Industry</label>
+              <input type="text" className="w-full p-3 rounded-xl border border-gray-300 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 outline-none" value={profileData.industry} onChange={(e) => setProfileData({ ...profileData, industry: e.target.value })} />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Career Stage</label>
+              <input type="text" className="w-full p-3 rounded-xl border border-gray-300 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 outline-none" value={profileData.stage} onChange={(e) => setProfileData({ ...profileData, stage: e.target.value })} />
+            </div>
+            <button onClick={() => setIsEditingProfile(false)} className="w-full bg-pink-600 text-white py-3 rounded-xl font-semibold hover:bg-pink-700 transition">Save Details</button>
+          </div>
+        ) : q.type === 'options' && (
           <div className="space-y-4 mb-10">
             {q.options.map(opt => {
               const isSelected = answers[q.id] === opt.value;
@@ -254,6 +285,22 @@ export default function App() {
                 </div>
               );
             })}
+
+            {q.id === 'q1' && !isEditingProfile && (
+              <div
+                onClick={() => setIsEditingProfile(true)}
+                className={`p-5 rounded-2xl border-2 cursor-pointer transition flex items-start gap-4 border-gray-200 hover:border-pink-300 hover:bg-gray-50 mt-4`}
+              >
+                <div className={`mt-1 flex-shrink-0 text-gray-400`}>
+                  <Wrench size={24} />
+                </div>
+                <div>
+                  <h3 className={`font-semibold text-lg text-gray-800`}>Make changes to your details</h3>
+                  <p className={`text-sm text-gray-500`}>Edit or input new details if the above are incorrect.</p>
+                </div>
+              </div>
+            )}
+
           </div>
         )}
 
@@ -411,126 +458,146 @@ export default function App() {
         </div>
 
         {/* 4-Step Resolution Section */}
-        <div className="print-break">
-          <div className="mb-10 text-center">
-            <h2 className="text-3xl font-bold text-gray-900">Your Personalized 4-Step Resolution</h2>
-            <p className="text-gray-500 mt-2 text-lg max-w-2xl mx-auto">This isn't just about identifying risks; it's about providing a clear roadmap to secure your future in an AI-driven world.</p>
-          </div>
-
-          <div className="space-y-6 relative before:absolute before:inset-0 before:ml-6 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-pink-200 before:to-transparent">
-
-            {/* STEP 1 */}
-            <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full border-4 border-white bg-pink-600 text-white shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-md relative z-10">
-                1
-              </div>
-              <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] p-6 bg-white rounded-2xl shadow-sm border border-gray-100 ml-4 md:ml-0">
-                <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center"><Target className="text-pink-600 mr-2" size={20} /> Acknowledge & Assess</h3>
-                <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                  You indicated your main concern: <em className="text-gray-800 font-medium">"{answers.q2 || 'The impact of AI on your industry'}"</em>.
-                  Recognizing your exposure level ({breakdown.I} Industry Risk) is the critical first step. You've successfully benchmarked your current vulnerability.
-                </p>
-                <p className="text-gray-900 text-sm font-semibold mb-3">
-                  We've found one valuable resource for you based on your answers. Please make sure to browse it on our platform:
-                </p>
-                <a href={recommendedResource.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-pink-50 text-pink-700 hover:bg-pink-100 rounded-lg font-semibold text-sm transition border border-pink-200 no-print w-full sm:w-auto text-center justify-center">
-                  <BookOpen size={16} /> Read: {recommendedResource.title}
-                </a>
-                <p className="hidden print:block text-sm text-pink-600 font-medium mt-2">Recommended Reading: {recommendedResource.title}</p>
-              </div>
-            </div>
-
-            {/* STEP 2 */}
-            <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full border-4 border-white bg-pink-600 text-white shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-md relative z-10">
-                2
-              </div>
-              <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] p-6 bg-white rounded-2xl shadow-sm border border-gray-100 ml-4 md:ml-0">
-                <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center"><Laptop className="text-pink-600 mr-2" size={20} /> Upskill via AI Use Cases</h3>
-                <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                  To lower your Automation vulnerability ({breakdown.V}), you must turn AI from a threat into a tool. Explore these tailored Use Cases:
-                </p>
-                <div className="space-y-3 no-print">
-                  {USE_CASES.slice(0, 2).map((uc, i) => (
-                    <div key={i} className="flex gap-3 items-center bg-pink-50/50 p-3 rounded-xl border border-pink-100 hover:border-pink-300 transition cursor-pointer">
-                      <div className="w-12 h-12 rounded-lg bg-cover bg-center shrink-0" style={{ backgroundImage: `url(${uc.img})` }}></div>
-                      <div>
-                        <h4 className="font-bold text-sm text-gray-900">{uc.title}</h4>
-                        <p className="text-xs text-gray-500 line-clamp-1">{uc.desc}</p>
-                      </div>
-                    </div>
-                  ))}
+        <div className="print-break relative">
+          {!isUnlocked && (
+            <div className="absolute inset-x-0 top-0 bottom-0 z-20 flex flex-col items-center justify-center bg-white/60 backdrop-blur-md rounded-3xl" style={{ marginTop: '-2rem', marginBottom: '-2rem' }}>
+              <div className="bg-white p-8 rounded-3xl shadow-2xl text-center max-w-md border border-gray-100">
+                <div className="w-16 h-16 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Target size={32} />
                 </div>
-                <p className="hidden print:block text-sm text-pink-600 font-medium mt-2">Recommended: {USE_CASES[0].title}, {USE_CASES[1].title}</p>
-              </div>
-            </div>
-
-            {/* STEP 3 */}
-            <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full border-4 border-white bg-pink-600 text-white shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-md relative z-10">
-                3
-              </div>
-              <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] p-6 bg-white rounded-2xl shadow-sm border border-gray-100 ml-4 md:ml-0">
-                <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center"><Users className="text-pink-600 mr-2" size={20} /> Join Careerlink Circles</h3>
-                <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                  You are not on this journey alone. Reduce your AI Skill Gap ({breakdown.S}) by collaborating with peers in Careerlink Circles. Solve real-world problems together.
-                </p>
-                <div className="space-y-3 no-print">
-                  {CIRCLES.slice(0, 2).map((circle, i) => (
-                    <div key={i} className="bg-gray-50 p-3 rounded-xl border border-gray-200 hover:border-pink-200 transition cursor-pointer">
-                      <div className="flex justify-between items-start mb-1">
-                        <h4 className="font-bold text-sm text-gray-900 leading-tight pr-2">{circle.title}</h4>
-                        <span className="text-[10px] uppercase font-bold text-pink-600 bg-pink-100 px-2 py-0.5 rounded-full shrink-0">{circle.level}</span>
-                      </div>
-                      <p className="text-xs text-gray-500">{circle.desc}</p>
-                    </div>
-                  ))}
-                </div>
-                <p className="hidden print:block text-sm text-pink-600 font-medium mt-2">Recommended: {CIRCLES[0].title}, {CIRCLES[1].title}</p>
-              </div>
-            </div>
-
-            {/* STEP 4 */}
-            <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full border-4 border-white bg-pink-600 text-white shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-md relative z-10">
-                4
-              </div>
-              <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] p-6 bg-white rounded-2xl shadow-sm border border-gray-100 ml-4 md:ml-0">
-                <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center"><Rocket className="text-pink-600 mr-2" size={20} /> Take Continuous Action</h3>
-                <p className="text-gray-600 text-sm leading-relaxed mb-3">
-                  Your vision is: <em className="text-gray-800 font-medium">"{answers.q7 || 'To secure and grow my future career'}"</em>.
-                  Keep revisiting the platform to test your skills, stay updated on new AI capabilities, and re-assess your risk profile every 6 months as technology evolves.
-                </p>
-
-                <p className="text-pink-700 font-medium text-xs sm:text-sm mt-3 bg-pink-50 p-3 rounded-xl border border-pink-100 leading-relaxed">
-                  <strong className="font-bold">Fact:</strong> 86% of our users who complete at least up to step three have 3x more chance of getting their AI Risk factor decrease by 35%.
-                </p>
-
-                <button className="mt-5 w-full bg-gray-900 text-white py-3 rounded-xl text-sm font-semibold hover:bg-pink-600 transition shadow-md no-print">
-                  Explore Careerlink Platform Now
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">Unlock Your Action Plan</h3>
+                <p className="text-gray-500 mb-6">Sign up to access your personalized 4-step resolution and see your dedicated AI acceleration kit.</p>
+                <button
+                  onClick={() => setShowSignupModal(true)}
+                  className="w-full bg-pink-600 text-white py-3 rounded-full font-bold text-lg hover:bg-pink-700 transition shadow-lg"
+                >
+                  Sign Up to Access Full Resolution
                 </button>
               </div>
             </div>
+          )}
 
+          <div className={`transition-all duration-500 ${!isUnlocked ? 'opacity-30 pointer-events-none select-none filter blur-sm' : ''}`}>
+            <div className="mb-10 text-center">
+              <h2 className="text-3xl font-bold text-gray-900">Your Personalized 4-Step Resolution</h2>
+              <p className="text-gray-500 mt-2 text-lg max-w-2xl mx-auto">This isn't just about identifying risks; it's about providing a clear roadmap to secure your future in an AI-driven world.</p>
+            </div>
+
+            <div className="space-y-6 relative before:absolute before:inset-0 before:ml-6 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-pink-200 before:to-transparent">
+
+              {/* STEP 1 */}
+              <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                <div className="flex items-center justify-center w-12 h-12 rounded-full border-4 border-white bg-pink-600 text-white shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-md relative z-10">
+                  1
+                </div>
+                <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] p-6 bg-white rounded-2xl shadow-sm border border-gray-100 ml-4 md:ml-0">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center"><Target className="text-pink-600 mr-2" size={20} /> Acknowledge & Assess</h3>
+                  <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                    You indicated your main concern: <em className="text-gray-800 font-medium">"{answers.q2 || 'The impact of AI on your industry'}"</em>.
+                    Recognizing your exposure level ({breakdown.I} Industry Risk) is the critical first step. You've successfully benchmarked your current vulnerability.
+                  </p>
+                  <p className="text-gray-900 text-sm font-semibold mb-3">
+                    We've found one valuable resource for you based on your answers. Please make sure to browse it on our platform:
+                  </p>
+                  <a href={recommendedResource.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-pink-50 text-pink-700 hover:bg-pink-100 rounded-lg font-semibold text-sm transition border border-pink-200 no-print w-full sm:w-auto text-center justify-center">
+                    <BookOpen size={16} /> Read: {recommendedResource.title}
+                  </a>
+                  <p className="hidden print:block text-sm text-pink-600 font-medium mt-2">Recommended Reading: {recommendedResource.title}</p>
+                </div>
+              </div>
+
+              {/* STEP 2 */}
+              <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                <div className="flex items-center justify-center w-12 h-12 rounded-full border-4 border-white bg-pink-600 text-white shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-md relative z-10">
+                  2
+                </div>
+                <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] p-6 bg-white rounded-2xl shadow-sm border border-gray-100 ml-4 md:ml-0">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center"><Laptop className="text-pink-600 mr-2" size={20} /> Upskill via AI Use Cases</h3>
+                  <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                    To lower your Automation vulnerability ({breakdown.V}), you must turn AI from a threat into a tool. Explore these tailored Use Cases:
+                  </p>
+                  <div className="space-y-3 no-print">
+                    {USE_CASES.slice(0, 2).map((uc, i) => (
+                      <div key={i} className="flex gap-3 items-center bg-pink-50/50 p-3 rounded-xl border border-pink-100 hover:border-pink-300 transition cursor-pointer">
+                        <div className="w-12 h-12 rounded-lg bg-cover bg-center shrink-0" style={{ backgroundImage: `url(${uc.img})` }}></div>
+                        <div>
+                          <h4 className="font-bold text-sm text-gray-900">{uc.title}</h4>
+                          <p className="text-xs text-gray-500 line-clamp-1">{uc.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="hidden print:block text-sm text-pink-600 font-medium mt-2">Recommended: {USE_CASES[0].title}, {USE_CASES[1].title}</p>
+                </div>
+              </div>
+
+              {/* STEP 3 */}
+              <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                <div className="flex items-center justify-center w-12 h-12 rounded-full border-4 border-white bg-pink-600 text-white shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-md relative z-10">
+                  3
+                </div>
+                <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] p-6 bg-white rounded-2xl shadow-sm border border-gray-100 ml-4 md:ml-0">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center"><Users className="text-pink-600 mr-2" size={20} /> Join Careerlink Circles</h3>
+                  <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                    You are not on this journey alone. Reduce your AI Skill Gap ({breakdown.S}) by collaborating with peers in Careerlink Circles. Solve real-world problems together.
+                  </p>
+                  <div className="space-y-3 no-print">
+                    {CIRCLES.slice(0, 2).map((circle, i) => (
+                      <div key={i} className="bg-gray-50 p-3 rounded-xl border border-gray-200 hover:border-pink-200 transition cursor-pointer">
+                        <div className="flex justify-between items-start mb-1">
+                          <h4 className="font-bold text-sm text-gray-900 leading-tight pr-2">{circle.title}</h4>
+                          <span className="text-[10px] uppercase font-bold text-pink-600 bg-pink-100 px-2 py-0.5 rounded-full shrink-0">{circle.level}</span>
+                        </div>
+                        <p className="text-xs text-gray-500">{circle.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="hidden print:block text-sm text-pink-600 font-medium mt-2">Recommended: {CIRCLES[0].title}, {CIRCLES[1].title}</p>
+                </div>
+              </div>
+
+              {/* STEP 4 */}
+              <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                <div className="flex items-center justify-center w-12 h-12 rounded-full border-4 border-white bg-pink-600 text-white shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-md relative z-10">
+                  4
+                </div>
+                <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] p-6 bg-white rounded-2xl shadow-sm border border-gray-100 ml-4 md:ml-0">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center"><Rocket className="text-pink-600 mr-2" size={20} /> Take Continuous Action</h3>
+                  <p className="text-gray-600 text-sm leading-relaxed mb-3">
+                    Your vision is: <em className="text-gray-800 font-medium">"{answers.q7 || 'To secure and grow my future career'}"</em>.
+                    Keep revisiting the platform to test your skills, stay updated on new AI capabilities, and re-assess your risk profile every 6 months as technology evolves.
+                  </p>
+
+                  <p className="text-pink-700 font-medium text-xs sm:text-sm mt-3 bg-pink-50 p-3 rounded-xl border border-pink-100 leading-relaxed">
+                    <strong className="font-bold">Fact:</strong> 86% of our users who complete at least up to step three have 3x more chance of getting their AI Risk factor decrease by 35%.
+                  </p>
+
+                  <button className="mt-5 w-full bg-gray-900 text-white py-3 rounded-xl text-sm font-semibold hover:bg-pink-600 transition shadow-md no-print">
+                    Explore Careerlink Platform Now
+                  </button>
+                </div>
+              </div>
+
+            </div>
           </div>
-        </div>
 
-        {/* Your Monday Move Section */}
-        <div className="mt-16 pt-10 border-t border-gray-200 print-break">
-          <div className="bg-gray-900 rounded-3xl shadow-xl overflow-hidden mb-12 border border-gray-800 p-10 text-center relative">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-pink-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
-            <div className="relative z-10">
-              <h3 className="text-3xl font-extrabold text-white mb-4 tracking-tight">Your Monday Move</h3>
-              <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-                The AI landscape is shifting fast. Don't wait until it's too late. What is the <strong className="text-white">one action</strong> you will take this Monday to future-proof your career?
-              </p>
-              <button
-                onClick={() => window.open('https://careerlink.ai', '_blank')}
-                className="bg-pink-600 text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-pink-500 transition shadow-[0_0_20px_rgba(219,39,119,0.4)] hover:shadow-[0_0_30px_rgba(219,39,119,0.6)] flex items-center mx-auto"
-              >
-                Commit to My Move <Rocket className="ml-2 w-5 h-5" />
-              </button>
+          {/* Your Monday Move Section */}
+          <div className="mt-16 pt-10 border-t border-gray-200 print-break">
+            <div className="bg-gray-900 rounded-3xl shadow-xl overflow-hidden mb-12 border border-gray-800 p-10 text-center relative">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-pink-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
+              <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
+              <div className="relative z-10">
+                <h3 className="text-3xl font-extrabold text-white mb-4 tracking-tight">Your Monday Move</h3>
+                <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+                  The AI landscape is shifting fast. Don't wait until it's too late. What is the <strong className="text-white">one action</strong> you will take this Monday to future-proof your career?
+                </p>
+                <button
+                  onClick={() => window.open('https://careerlink.ai', '_blank')}
+                  className="bg-pink-600 text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-pink-500 transition shadow-[0_0_20px_rgba(219,39,119,0.4)] hover:shadow-[0_0_30px_rgba(219,39,119,0.6)] flex items-center mx-auto"
+                >
+                  Commit to My Move <Rocket className="ml-2 w-5 h-5" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -578,6 +645,32 @@ export default function App() {
         {step === 8 && renderLoader()}
         {step === 9 && renderResults()}
       </main>
+
+      {/* Demo Sign Up Modal */}
+      {showSignupModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm fade-in">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 relative">
+            <button onClick={() => setShowSignupModal(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">Create Free Account</h3>
+            <p className="text-gray-500 mb-6">Enter any details below to view the demo report.</p>
+            <div className="space-y-4">
+              <input type="text" placeholder="Full Name" className="w-full p-3 rounded-xl border border-gray-200 focus:border-pink-500 outline-none" />
+              <input type="email" placeholder="Email Address" className="w-full p-3 rounded-xl border border-gray-200 focus:border-pink-500 outline-none" />
+              <button
+                onClick={() => {
+                  setIsUnlocked(true);
+                  setShowSignupModal(false);
+                }}
+                className="w-full bg-gray-900 text-white py-3 rounded-xl font-bold hover:bg-pink-600 transition shadow-md mt-2"
+              >
+                Unlock My Report
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
