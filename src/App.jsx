@@ -440,7 +440,7 @@ export default function App() {
                   Recognizing your exposure level ({breakdown.I} Industry Risk) is the critical first step. You've successfully benchmarked your current vulnerability.
                 </p>
                 <p className="text-gray-900 text-sm font-semibold mb-3">
-                  We've found one valuable resource for you based on your answers:
+                  We've found one valuable resource for you based on your answers. Please make sure to browse it on our platform:
                 </p>
                 <a href={recommendedResource.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-pink-50 text-pink-700 hover:bg-pink-100 rounded-lg font-semibold text-sm transition border border-pink-200 no-print w-full sm:w-auto text-center justify-center">
                   <BookOpen size={16} /> Read: {recommendedResource.title}
@@ -512,7 +512,7 @@ export default function App() {
                 </p>
 
                 <p className="text-pink-700 font-medium text-xs sm:text-sm mt-3 bg-pink-50 p-3 rounded-xl border border-pink-100 leading-relaxed">
-                  💡 <strong className="font-bold">Fact:</strong> 86% of our users who complete at least up to step three have 3x more chance of getting their AI Risk factor decrease by 35%.
+                  <strong className="font-bold">Fact:</strong> 86% of our users who complete at least up to step three have 3x more chance of getting their AI Risk factor decrease by 35%.
                 </p>
 
                 <button className="mt-5 w-full bg-gray-900 text-white py-3 rounded-xl text-sm font-semibold hover:bg-pink-600 transition shadow-md no-print">
@@ -524,70 +524,23 @@ export default function App() {
           </div>
         </div>
 
-        {/* Bonus Section */}
+        {/* Your Monday Move Section */}
         <div className="mt-16 pt-10 border-t border-gray-200 print-break">
-          <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">Bonus: Your AI Acceleration Kit</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col h-full">
-              <div className="w-12 h-12 bg-pink-100 text-pink-600 rounded-xl flex items-center justify-center mb-4">
-                <Wrench size={24} />
-              </div>
-              <h4 className="text-lg font-bold text-gray-900 mb-2">AI Tools For You</h4>
-              <ul className="text-sm text-gray-600 space-y-3 flex-grow">
-                <li>
-                  <a href="https://chatgpt.com" target="_blank" rel="noopener noreferrer" className="hover:text-pink-600 transition-colors">
-                    <strong className="text-gray-800 hover:text-pink-600">ChatGPT Data Analysis</strong>
-                  </a> - For automated reporting and insights.
-                </li>
-                <li>
-                  <a href="https://cursor.sh" target="_blank" rel="noopener noreferrer" className="hover:text-pink-600 transition-colors">
-                    <strong className="text-gray-800 hover:text-pink-600">Cursor AI</strong>
-                  </a> - Accelerate your coding and technical prototyping.
-                </li>
-                <li>
-                  <a href="https://gamma.app" target="_blank" rel="noopener noreferrer" className="hover:text-pink-600 transition-colors">
-                    <strong className="text-gray-800 hover:text-pink-600">Gamma App</strong>
-                  </a> - Instantly generate investor-ready pitch decks.
-                </li>
-              </ul>
+          <div className="bg-gray-900 rounded-3xl shadow-xl overflow-hidden mb-12 border border-gray-800 p-10 text-center relative">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-pink-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
+            <div className="relative z-10">
+              <h3 className="text-3xl font-extrabold text-white mb-4 tracking-tight">Your Monday Move</h3>
+              <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+                The AI landscape is shifting fast. Don't wait until it's too late. What is the <strong className="text-white">one action</strong> you will take this Monday to future-proof your career?
+              </p>
+              <button
+                onClick={() => window.open('https://careerlink.ai', '_blank')}
+                className="bg-pink-600 text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-pink-500 transition shadow-[0_0_20px_rgba(219,39,119,0.4)] hover:shadow-[0_0_30px_rgba(219,39,119,0.6)] flex items-center mx-auto"
+              >
+                Commit to My Move <Rocket className="ml-2 w-5 h-5" />
+              </button>
             </div>
-
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col h-full">
-              <div className="w-12 h-12 bg-pink-100 text-pink-600 rounded-xl flex items-center justify-center mb-4">
-                <MessageSquare size={24} />
-              </div>
-              <h4 className="text-lg font-bold text-gray-900 mb-2">AI Prompts For You</h4>
-              <ul className="text-sm text-gray-600 space-y-3 flex-grow">
-                <li className="italic bg-gray-50 p-2 rounded-md">"Act as an expert career strategist. How can I leverage AI to transition from [Current Role] to [Dream Role] in 6 months?"</li>
-                <li className="italic bg-gray-50 p-2 rounded-md">"Identify 3 repetitive tasks in [Your Industry] that can be automated using free AI tools today."</li>
-              </ul>
-            </div>
-
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col h-full">
-              <div className="w-12 h-12 bg-pink-100 text-pink-600 rounded-xl flex items-center justify-center mb-4">
-                <Network size={24} />
-              </div>
-              <h4 className="text-lg font-bold text-gray-900 mb-2">Networking</h4>
-              <p className="text-sm text-gray-500 mb-3">People to connect with:</p>
-              <div className="space-y-3 flex-grow">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 font-bold">JD</div>
-                  <div>
-                    <p className="text-sm font-bold text-gray-900">John Doe</p>
-                    <p className="text-xs text-gray-500">AI Implementation Lead</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 font-bold">JS</div>
-                  <div>
-                    <p className="text-sm font-bold text-gray-900">Jane Smith</p>
-                    <p className="text-xs text-gray-500">Founder, AutomationCircle</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
           </div>
         </div>
       </div>
