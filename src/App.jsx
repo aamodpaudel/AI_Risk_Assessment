@@ -132,6 +132,15 @@ export default function App() {
   });
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
+  const [showReportNotice, setShowReportNotice] = useState(false);
+
+  useEffect(() => {
+    let timer;
+    if (showReportNotice) {
+      timer = setTimeout(() => setShowReportNotice(false), 10000);
+    }
+    return () => clearTimeout(timer);
+  }, [showReportNotice]);
 
   // Print Styles Setup
   useEffect(() => {
@@ -205,6 +214,7 @@ export default function App() {
       });
 
       setStep(9); // Show Results
+      setShowReportNotice(true);
     }, 2000);
   };
 
@@ -672,6 +682,23 @@ export default function App() {
                 Unlock My Report
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Report Notice Overlay */}
+      {showReportNotice && (
+        <div className="fixed top-4 sm:top-8 left-1/2 transform -translate-x-1/2 z-50 fade-in w-[90%] max-w-lg no-print">
+          <div className="bg-gray-900 border border-gray-700 shadow-2xl rounded-2xl p-4 sm:p-5 flex items-start gap-4">
+            <div className="text-pink-500 mt-0.5"><AlertTriangle size={24} /></div>
+            <div className="flex-1">
+              <p className="text-white text-sm sm:text-base font-medium leading-relaxed">
+                You're only seeing the score analysis. Sign up to receive the full report along with resolution steps.
+              </p>
+            </div>
+            <button onClick={() => setShowReportNotice(false)} className="text-gray-400 hover:text-white transition p-1 -mt-1 -mr-1">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
           </div>
         </div>
       )}
