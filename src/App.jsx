@@ -463,6 +463,9 @@ export default function App() {
           {!isUnlocked && (
             <div className="absolute inset-x-0 top-0 bottom-0 z-20 flex flex-col items-center justify-start pt-24 bg-white/60 backdrop-blur-md rounded-3xl" style={{ marginTop: '-2rem', marginBottom: '-2rem' }}>
               <div className="bg-white p-8 rounded-3xl shadow-2xl text-center max-w-lg border border-gray-100 mx-4">
+                <div className="mb-6 inline-flex justify-center items-center gap-2 px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-sm font-bold uppercase tracking-widest border border-gray-200 cursor-default">
+                  <Lock size={16} /> This section is locked
+                </div>
                 <div className="w-16 h-16 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm border border-pink-200">
                   <Lock size={32} />
                 </div>
