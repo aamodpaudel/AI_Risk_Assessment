@@ -3,7 +3,7 @@ import {
   Compass, ShieldAlert, Rocket, Target, Briefcase,
   Laptop, CheckCircle, Download, ChevronRight,
   ChevronLeft, AlertTriangle, PlayCircle, BarChart3, Users,
-  BookOpen, Wrench, MessageSquare, Network, Brain, Lock
+  BookOpen, Wrench, MessageSquare, Network, Brain, Lock, PieChart
 } from 'lucide-react';
 
 // --- DATA & CONFIG ---
@@ -70,9 +70,9 @@ const QUESTIONS = [
     title: 'How often do you use AI tools to get things done?',
     type: 'options',
     options: [
-      { id: 's_rare', label: 'Rarely (Passenger)', desc: 'I rarely use them, or I only use them for simple web searches.', value: 100 },
-      { id: 's_daily', label: 'Daily (Co-Pilot)', desc: 'I use them daily to help me write, brainstorm, or solve problems faster.', value: 50 },
-      { id: 's_power', label: 'Power User (Captain)', desc: 'I’ve customized my tools or connected them to handle my work automatically.', value: 0 }
+      { id: 's_rare', label: 'Rarely', desc: 'I rarely use them, or I only use them for simple web searches.', value: 100 },
+      { id: 's_daily', label: 'Daily', desc: 'I use them daily to help me write, brainstorm, or solve problems faster.', value: 50 },
+      { id: 's_power', label: 'Power User', desc: 'I’ve customized my tools or connected them to handle my work automatically.', value: 0 }
     ]
   },
   {
@@ -91,10 +91,10 @@ const QUESTIONS = [
     title: 'With AI career disruption, where do you want to go next?',
     type: 'options',
     options: [
-      { id: 'c_launch', label: 'I want to stay safe.', desc: '(Future-Proofing)', value: 15 },
-      { id: 'c_climb', label: 'I want to get ahead.', desc: '(The Leap)', value: 5 },
-      { id: 'c_pivot', label: 'I want to change paths.', desc: '(The Pivot)', value: 10 },
-      { id: 'c_build', label: 'I want to be a boss by creating something big.', desc: '(The Build)', value: -15 }
+      { id: 'c_launch', label: 'I want to stay safe.', desc: '', value: 15 },
+      { id: 'c_climb', label: 'I want to get ahead.', desc: '', value: 5 },
+      { id: 'c_pivot', label: 'I want to change paths.', desc: '', value: 10 },
+      { id: 'c_build', label: 'I want to be a boss by creating something big.', desc: '', value: -15 }
     ]
   },
   {
@@ -112,7 +112,7 @@ const USE_CASES = [
 ];
 
 const CIRCLES = [
-  { title: 'Prompt Engineering: Everyday AI Skills', desc: 'Join discussions on essential AI skills for the modern workplace.', level: 'Beginner' },
+  { title: 'AI Technology 101 - Learn Essential AI Skills!', desc: 'Join discussions on essential AI skills for the modern workplace.', level: 'Beginner' },
   { title: 'Turn AI into Business Opportunity', desc: 'For Startup Founders and Entrepreneurs looking to leverage AI.', level: 'Advanced' },
   { title: 'Vibe Coding: AI-Powered MVP Building', desc: 'Learn how to build software faster using Generative AI approaches.', level: 'Intermediate' }
 ];
@@ -503,15 +503,15 @@ export default function App() {
         </div>
 
         {/* Opportunity Score Section */}
-        <div className="mb-12 bg-gradient-to-br from-blue-900 to-indigo-900 rounded-3xl shadow-xl overflow-hidden border border-blue-800 text-white p-10 print-break">
-          <div className="md:flex items-center gap-10">
-            <div className="md:w-1/3 text-center mb-8 md:mb-0">
-              <div className="text-sm font-bold tracking-widest uppercase mb-4 text-blue-300">Your Opportunity Score</div>
-              <div className="text-7xl font-extrabold text-blue-100 tracking-tight">{opportunityScore}</div>
+        <div className="mb-10 bg-gradient-to-br from-blue-900 to-indigo-900 rounded-3xl shadow-xl overflow-hidden border border-blue-800 text-white p-6 sm:p-8 print-break">
+          <div className="md:flex items-center gap-8">
+            <div className="md:w-1/3 text-center mb-6 md:mb-0">
+              <div className="text-sm font-bold tracking-widest uppercase mb-3 text-blue-300">Your Opportunity Score</div>
+              <div className="text-5xl font-extrabold text-blue-100 tracking-tight">{opportunityScore}</div>
             </div>
-            <div className="md:w-2/3 border-t md:border-t-0 md:border-l border-blue-800 pt-8 md:pt-0 md:pl-10">
-              <h3 className="text-2xl font-bold mb-3 flex items-center gap-2"><Rocket className="text-pink-400" /> High Potential for Career "Leap" or "Build"</h3>
-              <p className="text-blue-200 text-lg leading-relaxed">
+            <div className="md:w-2/3 border-t md:border-t-0 md:border-l border-blue-800 pt-6 md:pt-0 md:pl-8">
+              <h3 className="text-2xl font-bold mb-3 flex items-center gap-2"><PieChart className="text-pink-400" /> High Potential for Career "Leap" or "Build"</h3>
+              <p className="text-blue-200 text-base leading-relaxed">
                 While your risk score highlights your vulnerabilities, your Opportunity Score shows your potential energy. A higher score means you have the raw momentum and industry dynamics to drastically accelerate your career if you apply the right AI leverage today.
               </p>
             </div>
@@ -625,18 +625,32 @@ export default function App() {
                   4
                 </div>
                 <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] p-6 bg-white rounded-2xl shadow-sm border border-gray-100 ml-4 md:ml-0">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center"><Rocket className="text-pink-600 mr-2" size={20} /> Take Continuous Action</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center"><PieChart className="text-pink-600 mr-2" size={20} /> Take Continuous Action</h3>
                   <p className="text-gray-600 text-sm leading-relaxed mb-3">
                     Keep revisiting the platform to test your skills, stay updated on new AI capabilities, and re-assess your risk profile every 6 months as technology evolves.
                   </p>
 
-                  <p className="text-pink-700 font-medium text-xs sm:text-sm mt-3 bg-pink-50 p-3 rounded-xl border border-pink-100 leading-relaxed">
+                  <p className="text-pink-700 font-medium text-xs sm:text-sm mt-3 mb-5 bg-pink-50 p-3 rounded-xl border border-pink-100 leading-relaxed">
                     <strong className="font-bold">Fact:</strong> 86% of our users who complete at least up to step three have 3x more chance of getting their AI Risk factor decrease by 35%.
                   </p>
 
-                  <button className="mt-5 w-full bg-gray-900 text-white py-3 rounded-xl text-sm font-semibold hover:bg-pink-600 transition shadow-md no-print">
-                    Explore Careerlink Platform Now
-                  </button>
+                  <div className="mt-5 w-full p-4 rounded-xl border border-pink-200 bg-pink-50 no-print">
+                    <h4 className="text-sm font-bold text-gray-900 mb-3 text-center">Try at least a tool this week recommended for you:</h4>
+                    <div className="flex justify-center gap-4">
+                      <div className="flex flex-col items-center gap-1">
+                        <img src="chatgpt-logo-transparent-background-free-png.webp" alt="ChatGPT" className="w-10 h-10 object-contain bg-white rounded-lg p-1 shadow-sm" />
+                        <span className="text-[10px] font-bold text-gray-600">ChatGPT</span>
+                      </div>
+                      <div className="flex flex-col items-center gap-1">
+                        <img src="claude-color.png" alt="Claude" className="w-10 h-10 object-contain bg-white rounded-lg p-1 shadow-sm" />
+                        <span className="text-[10px] font-bold text-gray-600">Claude</span>
+                      </div>
+                      <div className="flex flex-col items-center gap-1">
+                        <img src="gemini_icon-logo_brandlogos.net_aacx5.png" alt="Gemini" className="w-10 h-10 object-contain bg-white rounded-lg p-1 shadow-sm" />
+                        <span className="text-[10px] font-bold text-gray-600">Gemini</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -654,12 +668,14 @@ export default function App() {
                   Glad you took this assessment. Unless you take actions right from tomorrow, you can't secure your future.
                 </p>
 
-                <div className="bg-gray-800/80 p-6 rounded-2xl border border-gray-700 max-w-md mx-auto mb-8 backdrop-blur-sm">
-                  <h4 className="text-lg font-bold text-white mb-4">Try at least a tool this week recommended for you:</h4>
-                  <div className="flex justify-center gap-6 mb-2">
-                    <img src="chatgpt-logo-transparent-background-free-png.webp" alt="ChatGPT" className="w-12 h-12 object-contain bg-white rounded-lg p-1" />
-                    <img src="claude-color.png" alt="Claude" className="w-12 h-12 object-contain bg-white rounded-lg p-1" />
-                    <img src="gemini_icon-logo_brandlogos.net_aacx5.png" alt="Gemini" className="w-12 h-12 object-contain bg-white rounded-lg p-1" />
+                <div className="bg-gray-800/80 p-6 rounded-2xl border border-gray-700 max-w-md mx-auto mb-8 backdrop-blur-sm text-left">
+                  <h4 className="text-lg font-bold text-white mb-4 text-center">Join one of these careerlink circles specifically designed for you:</h4>
+                  <div className="bg-white/10 p-4 rounded-xl border border-white/20">
+                    <div className="flex justify-between items-start mb-1">
+                      <h5 className="font-bold text-sm text-white leading-tight pr-2">{CIRCLES[0].title}</h5>
+                      <span className="text-[10px] uppercase font-bold text-pink-300 bg-pink-900/50 px-2 py-0.5 rounded-full shrink-0">{CIRCLES[0].level}</span>
+                    </div>
+                    <p className="text-xs text-gray-300">{CIRCLES[0].desc}</p>
                   </div>
                 </div>
 
