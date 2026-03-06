@@ -133,6 +133,9 @@ export default function App() {
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [showReportNotice, setShowReportNotice] = useState(false);
+  const [showScoringLogic, setShowScoringLogic] = useState(false);
+  const [mondayPledgeEmail, setMondayPledgeEmail] = useState('');
+  const [pledgeSubmitted, setPledgeSubmitted] = useState(false);
 
   useEffect(() => {
     let timer;
@@ -177,8 +180,14 @@ export default function App() {
     setStep(8); // Loader
 
     setTimeout(() => {
-      // Formula: Risk Score = (I * 0.35) + (V * 0.40) + (S * 0.15) + (O * 0.10)
-      const baseI = answers.q1 || 75; // Default 75 if skipped
+      // New Scoring Logic from text file
+      let baseI = 75;
+      if (answers.q1 === 'digital') baseI = 90;
+      else if (answers.q1 === 'creative') baseI = 80;
+      else if (answers.q1 === 'finance') baseI = 75;
+      else if (answers.q1 === 'leadership') baseI = 50;
+      else if (answers.q1 === 'human') baseI = 30;
+
       const offset = answers.q6 || 0;
       let I = baseI + offset;
       I = Math.max(0, Math.min(100, I)); // Clamp 0-100
@@ -187,27 +196,39 @@ export default function App() {
       const S = answers.q4 !== undefined ? answers.q4 : 50;
       const O = answers.q5 !== undefined ? answers.q5 : 50;
 
-      const riskScore = Math.round((I * 0.35) + (V * 0.40) + (S * 0.15) + (O * 0.10));
+      // S and O are structured where 100 = bad/passenger, 0 = good/captain
+      // So proficiency is (100 - S) and (100 - O)
+      const proficiencyS = 100 - S;
+      const proficiencyO = 100 - O;
+
+      // Risk Score = (I * 0.50) + (V * 0.50) - (ProfS * 0.20) - (ProfO * 0.20)
+      let riskScore = Math.round((I * 0.50) + (V * 0.50) - (proficiencyS * 0.20) - (proficiencyO * 0.20));
+      riskScore = Math.max(0, Math.min(100, riskScore));
+
+      // Opportunity Score max 100
+      let opportunityScore = Math.round((I * 0.50) + (V * 0.50) + (proficiencyS * 0.20) + (proficiencyO * 0.20));
+      opportunityScore = Math.max(0, Math.min(100, opportunityScore));
 
       let profile = '';
       let interpretation = '';
 
       if (riskScore <= 25) {
         profile = 'The Pilot (Low Risk)';
-        interpretation = "You're in a great spot, [Username]! You've successfully integrated AI into your daily routine and are acting as a true 'Director of Intelligence'. Keep expanding your strategic vision and leading the way.";
+        interpretation = "You're in a great spot! You've successfully integrated AI into your daily routine and are acting as a true 'Director of Intelligence'. Keep expanding your strategic vision and leading the way.";
       } else if (riskScore <= 50) {
         profile = 'The Navigator (Medium Risk)';
-        interpretation = "You're doing well, [Username], but it's important to stay alert. You're safe for now, but to ensure long-term security, let's proactively close your AI Skill Gap to stay ahead of the curve.";
+        interpretation = "You're doing well, but it's important to stay alert. You're safe for now, but to ensure long-term security, let's proactively close your AI Skill Gap to stay ahead of the curve.";
       } else if (riskScore <= 75) {
         profile = 'The Passenger (High Risk)';
-        interpretation = "It looks like your current role is shifting, [Username]. A large portion of your tasks is becoming commoditized by AI. But don't worry—now is the perfect time to start steering the ship and taking control of your AI journey.";
+        interpretation = "It looks like your current role is shifting. A large portion of your tasks is becoming commoditized by AI. But don't worry, now is the perfect time to start steering the ship and taking control of your AI journey.";
       } else {
         profile = 'High Risk (Critical Transformation)';
-        interpretation = "This is a pivotal moment for you, [Username]. Your current workflow is highly exposed to automation. The best move right now is to embrace a dramatic pivot or focus heavily on upskilling. We're here to guide you through it.";
+        interpretation = "This is a pivotal moment for you. Your current workflow is highly exposed to automation. The best move right now is to embrace a dramatic pivot or focus heavily on upskilling. We're here to guide you through it.";
       }
 
       setResults({
         score: riskScore,
+        opportunityScore,
         profile,
         interpretation,
         breakdown: { I, V, S, O }
@@ -362,7 +383,7 @@ export default function App() {
   );
 
   const renderResults = () => {
-    const { score, profile, interpretation, breakdown } = results;
+    const { score, opportunityScore, profile, interpretation, breakdown } = results;
     const recommendedResource = getResourceMatch(answers);
 
     // Determine gradient/colors based on score
@@ -422,15 +443,31 @@ export default function App() {
             </div>
 
             <div className="p-10 md:w-3/5 bg-white">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">What this means for you, [Username]</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">What this means for you</h3>
               <p className="text-lg text-gray-600 mb-8 leading-relaxed">{interpretation}</p>
 
-              <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Risk Factors Breakdown</h4>
+              <div className="flex items-center justify-between mb-4">
+                <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider">Risk Factors Breakdown</h4>
+                <button
+                  onClick={() => setShowScoringLogic(!showScoringLogic)}
+                  className="w-5 h-5 rounded-full bg-gray-100 text-gray-500 hover:bg-pink-100 hover:text-pink-600 flex items-center justify-center text-xs font-bold transition"
+                  title="How is this calculated?"
+                >
+                  ?
+                </button>
+              </div>
+
+              {showScoringLogic && (
+                <div className="mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200 text-sm text-gray-600 leading-relaxed fade-in">
+                  <strong className="text-gray-900 block mb-2">How your Risk is calculated:</strong>
+                  Risk = (Industry Exposure × 50%) + (Automation Vol. × 50%) - (AI Skill Protection × 20%) - (AI Oversight Protection × 20%)
+                </div>
+              )}
+
               <div className="grid grid-cols-2 gap-x-8 gap-y-6">
                 <div>
                   <div className="flex justify-between text-sm mb-1 font-medium">
-                    <span className="text-gray-600">Industry Exposure (35%)</span>
-                    <span className="text-gray-900">{breakdown.I}</span>
+                    <span className="text-gray-600">Industry Exposure</span>
                   </div>
                   <div className="w-full bg-gray-100 rounded-full h-2">
                     <div className="bg-pink-600 h-2 rounded-full" style={{ width: `${breakdown.I}%` }}></div>
@@ -438,8 +475,7 @@ export default function App() {
                 </div>
                 <div>
                   <div className="flex justify-between text-sm mb-1 font-medium">
-                    <span className="text-gray-600">Automation Vulnerability (40%)</span>
-                    <span className="text-gray-900">{breakdown.V}</span>
+                    <span className="text-gray-600">Automation Vulnerability</span>
                   </div>
                   <div className="w-full bg-gray-100 rounded-full h-2">
                     <div className="bg-pink-600 h-2 rounded-full" style={{ width: `${breakdown.V}%` }}></div>
@@ -447,8 +483,7 @@ export default function App() {
                 </div>
                 <div>
                   <div className="flex justify-between text-sm mb-1 font-medium">
-                    <span className="text-gray-600">AI Skill Gap (15%)</span>
-                    <span className="text-gray-900">{breakdown.S}</span>
+                    <span className="text-gray-600">AI Skill Gap</span>
                   </div>
                   <div className="w-full bg-gray-100 rounded-full h-2">
                     <div className="bg-pink-400 h-2 rounded-full" style={{ width: `${breakdown.S}%` }}></div>
@@ -456,14 +491,29 @@ export default function App() {
                 </div>
                 <div>
                   <div className="flex justify-between text-sm mb-1 font-medium">
-                    <span className="text-gray-600">Lack of AI Oversight (10%)</span>
-                    <span className="text-gray-900">{breakdown.O}</span>
+                    <span className="text-gray-600">Lack of AI Oversight</span>
                   </div>
                   <div className="w-full bg-gray-100 rounded-full h-2">
                     <div className="bg-pink-400 h-2 rounded-full" style={{ width: `${breakdown.O}%` }}></div>
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Opportunity Score Section */}
+        <div className="mb-12 bg-gradient-to-br from-blue-900 to-indigo-900 rounded-3xl shadow-xl overflow-hidden border border-blue-800 text-white p-10 print-break">
+          <div className="md:flex items-center gap-10">
+            <div className="md:w-1/3 text-center mb-8 md:mb-0">
+              <div className="text-sm font-bold tracking-widest uppercase mb-4 text-blue-300">Your Opportunity Score</div>
+              <div className="text-7xl font-extrabold text-blue-100 tracking-tight">{opportunityScore}</div>
+            </div>
+            <div className="md:w-2/3 border-t md:border-t-0 md:border-l border-blue-800 pt-8 md:pt-0 md:pl-10">
+              <h3 className="text-2xl font-bold mb-3 flex items-center gap-2"><Rocket className="text-pink-400" /> High Potential for Career "Leap" or "Build"</h3>
+              <p className="text-blue-200 text-lg leading-relaxed">
+                While your risk score highlights your vulnerabilities, your Opportunity Score shows your potential energy. A higher score means you have the raw momentum and industry dynamics to drastically accelerate your career if you apply the right AI leverage today.
+              </p>
             </div>
           </div>
         </div>
@@ -505,9 +555,8 @@ export default function App() {
                   1
                 </div>
                 <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] p-6 bg-white rounded-2xl shadow-sm border border-gray-100 ml-4 md:ml-0">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center"><Target className="text-pink-600 mr-2" size={20} /> Acknowledge & Assess</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center"><Target className="text-pink-600 mr-2" size={20} /> Acknowledge & Plan for Action</h3>
                   <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                    You indicated your main concern: <em className="text-gray-800 font-medium">"{answers.q2 || 'The impact of AI on your industry'}"</em>.
                     Recognizing your exposure level ({breakdown.I} Industry Risk) is the critical first step. You've successfully benchmarked your current vulnerability.
                   </p>
                   <p className="text-gray-900 text-sm font-semibold mb-3">
@@ -526,7 +575,7 @@ export default function App() {
                   2
                 </div>
                 <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] p-6 bg-white rounded-2xl shadow-sm border border-gray-100 ml-4 md:ml-0">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center"><Laptop className="text-pink-600 mr-2" size={20} /> Upskill via AI Use Cases</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center"><Laptop className="text-pink-600 mr-2" size={20} /> solve use cases using AI</h3>
                   <p className="text-gray-600 text-sm leading-relaxed mb-4">
                     To lower your Automation vulnerability ({breakdown.V}), you must turn AI from a threat into a tool. Explore these tailored Use Cases:
                   </p>
@@ -551,7 +600,7 @@ export default function App() {
                   3
                 </div>
                 <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] p-6 bg-white rounded-2xl shadow-sm border border-gray-100 ml-4 md:ml-0">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center"><Users className="text-pink-600 mr-2" size={20} /> Join Careerlink Circles</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center"><Users className="text-pink-600 mr-2" size={20} /> Browse, Join & Submit Circles</h3>
                   <p className="text-gray-600 text-sm leading-relaxed mb-4">
                     You are not on this journey alone. Reduce your AI Skill Gap ({breakdown.S}) by collaborating with peers in Careerlink Circles. Solve real-world problems together.
                   </p>
@@ -578,7 +627,6 @@ export default function App() {
                 <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] p-6 bg-white rounded-2xl shadow-sm border border-gray-100 ml-4 md:ml-0">
                   <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center"><Rocket className="text-pink-600 mr-2" size={20} /> Take Continuous Action</h3>
                   <p className="text-gray-600 text-sm leading-relaxed mb-3">
-                    Your vision is: <em className="text-gray-800 font-medium">"{answers.q7 || 'To secure and grow my future career'}"</em>.
                     Keep revisiting the platform to test your skills, stay updated on new AI capabilities, and re-assess your risk profile every 6 months as technology evolves.
                   </p>
 
@@ -603,14 +651,43 @@ export default function App() {
               <div className="relative z-10">
                 <h3 className="text-3xl font-extrabold text-white mb-4 tracking-tight">Your Monday Move</h3>
                 <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-                  The AI landscape is shifting fast. Don't wait until it's too late. What is the <strong className="text-white">one action</strong> you will take this Monday to future-proof your career?
+                  Glad you took this assessment. Unless you take actions right from tomorrow, you can't secure your future.
                 </p>
-                <button
-                  onClick={() => window.open('https://careerlink.ai', '_blank')}
-                  className="bg-pink-600 text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-pink-500 transition shadow-[0_0_20px_rgba(219,39,119,0.4)] hover:shadow-[0_0_30px_rgba(219,39,119,0.6)] flex items-center mx-auto"
-                >
-                  Commit to My Move <Rocket className="ml-2 w-5 h-5" />
-                </button>
+
+                <div className="bg-gray-800/80 p-6 rounded-2xl border border-gray-700 max-w-md mx-auto mb-8 backdrop-blur-sm">
+                  <h4 className="text-lg font-bold text-white mb-4">Try at least a tool this week recommended for you:</h4>
+                  <div className="flex justify-center gap-6 mb-2">
+                    <img src="chatgpt-logo-transparent-background-free-png.webp" alt="ChatGPT" className="w-12 h-12 object-contain bg-white rounded-lg p-1" />
+                    <img src="claude-color.png" alt="Claude" className="w-12 h-12 object-contain bg-white rounded-lg p-1" />
+                    <img src="gemini_icon-logo_brandlogos.net_aacx5.png" alt="Gemini" className="w-12 h-12 object-contain bg-white rounded-lg p-1" />
+                  </div>
+                </div>
+
+                {!pledgeSubmitted ? (
+                  <div className="max-w-md mx-auto">
+                    <p className="text-white font-medium mb-3 tracking-wide">"I commit to doing this."</p>
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <input
+                        type="email"
+                        placeholder="Enter your email"
+                        className="flex-1 p-3 rounded-xl border border-gray-700 bg-gray-800 text-white focus:border-pink-500 outline-none"
+                        value={mondayPledgeEmail}
+                        onChange={(e) => setMondayPledgeEmail(e.target.value)}
+                      />
+                      <button
+                        onClick={() => setPledgeSubmitted(true)}
+                        className="bg-pink-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-pink-500 transition shadow-[0_0_15px_rgba(219,39,119,0.3)] whitespace-nowrap"
+                      >
+                        Start My Commitment
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="bg-green-500/20 border border-green-500/50 text-green-300 p-4 rounded-xl max-w-md mx-auto">
+                    <p className="font-bold flex items-center justify-center gap-2 mb-1"><CheckCircle size={20} /> Commitment Locked In!</p>
+                    <p className="text-sm">Thank you for your commitment. We'll make sure to remind you this upcoming Monday regarding the completion of your commitment.</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
