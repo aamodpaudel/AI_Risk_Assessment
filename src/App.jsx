@@ -386,6 +386,15 @@ export default function App() {
     const { score, opportunityScore, profile, interpretation, breakdown } = results;
     const recommendedResource = getResourceMatch(answers);
 
+    // Determine highest risk factor for Step 1
+    const riskFactors = [
+      { name: 'Industry Risk', value: breakdown.I },
+      { name: 'Automation Vulnerability', value: breakdown.V },
+      { name: 'AI Skill Gap', value: breakdown.S },
+      { name: 'Lack of AI Oversight', value: breakdown.O }
+    ];
+    const highestRisk = riskFactors.reduce((prev, current) => (prev.value > current.value) ? prev : current);
+
     // Determine gradient/colors based on score
     let scoreColor = 'text-green-600';
     let bgColor = 'bg-green-50';
@@ -557,7 +566,7 @@ export default function App() {
                 <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] p-6 bg-white rounded-2xl shadow-sm border border-gray-100 ml-4 md:ml-0">
                   <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center"><Target className="text-pink-600 mr-2" size={20} /> Acknowledge & Plan for Action</h3>
                   <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                    Recognizing your exposure level ({breakdown.I} Industry Risk) is the critical first step. You've successfully benchmarked your current vulnerability.
+                    Recognizing your biggest vulnerability ({highestRisk.value} {highestRisk.name}) is the critical first step. You've successfully benchmarked your current risk profile.
                   </p>
                   <p className="text-gray-900 text-sm font-semibold mb-3">
                     We've found one valuable resource for you based on your answers. Please make sure to browse it on our platform:
@@ -575,7 +584,7 @@ export default function App() {
                   2
                 </div>
                 <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] p-6 bg-white rounded-2xl shadow-sm border border-gray-100 ml-4 md:ml-0">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center"><Laptop className="text-pink-600 mr-2" size={20} /> solve use cases using AI</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center"><Laptop className="text-pink-600 mr-2" size={20} /> Solve use cases using AI</h3>
                   <p className="text-gray-600 text-sm leading-relaxed mb-4">
                     To lower your Automation vulnerability ({breakdown.V}), you must turn AI from a threat into a tool. Explore these tailored Use Cases:
                   </p>
